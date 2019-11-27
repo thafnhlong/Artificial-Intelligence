@@ -1,0 +1,76 @@
+import sys
+
+def removeduplicate(logic):
+    return list(set(logic))
+def splitlogic(logicstring):
+    return list(filter(None,logicstring.replace(' ','').replace("\n","").split('|')))
+def HopGiai(kb):
+    isHG = False
+    if len(kb) < 2:
+        return kb
+
+    for i in range(0,len(kb)-1):
+
+        if len(kb[i]) < 2:
+            continue
+        for j in range(i+1,len(kb)):
+            if len(kb[j]) < 2:
+                continue
+                
+            a = kb[i]
+            b = kb[j]
+            
+            for var in a:
+                indexofb = -1
+                if var.count('~') == 1:
+                    if var[1] in b:
+                        isHG = True
+                        indexofb = b.index(var[1])
+                else:
+                    if ('~' + var) in b:
+                        isHG = True
+                        indexofb = b.index('~' + var)
+                
+                if isHG:
+                    
+                    kb.remove(a)
+                    kb.remove(b)
+                    
+                    a.remove(var)
+                    del b[indexofb]
+                    
+                    kb.append(a+b)
+                    
+                    HopGiai(kb)
+                    return kb
+    return kb
+
+#--------------------------------
+if (len(sys.argv) < 3):
+    print('python 1760357.py <tenfiledauvao> <tenfiledaura>')
+    sys.exit(1)
+    
+inputfile = sys.argv[1]
+outputfile = sys.argv[2]
+
+f = open(inputfile,'r')
+data = f.readlines()
+f.close()
+
+num = int(data[0])
+
+arrlogic=[]
+for logicstring in data[1:]:
+    arrlogic.append(splitlogic(logicstring))
+
+ketluan = arrlogic[-1]
+arrlogic.remove(ketluan)
+
+ketqua = HopGiai(arrlogic)
+
+f = open(outputfile,'w')
+if len(ketqua) == 1 and set(ketqua[0]) == set(ketluan):
+    f.write('true')
+else :
+    f.write('false')
+f.close()

@@ -1,0 +1,12 @@
+11
+A
+B
+A|C
+~K|~E|A
+~K|~E|B
+~A|~B|K
+~A|~B|E
+C|D
+~E|~D
+~F|~D
+B&C
